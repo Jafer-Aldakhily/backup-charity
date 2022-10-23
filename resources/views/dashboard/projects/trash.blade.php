@@ -14,26 +14,32 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Username</th>
+                            <th>image</th>
+                            <th>Name of project</th>
+                            <th>Description</th>
+                            <th>status</th>
+                            <th>target_donations</th>
+                            <th>starting_date</th>
+                            <th>category_id</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($users as $user)
+                        @php
+                            $i=0;
+                        @endphp
+                        @foreach ($projects as $project)
                         <tr>
-                            <td>1</td>
-                            <td>{{ $user->name }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td>{{ $user->role }}</td>
+                            <td>{{++$i}}</td>
+                            <td><img src="data:image/jpg;base64,{{ chunk_split(base64_encode($project->image)) }}"                                " alt=""></td>
+                            <td>{{ $project->name }}</td>
+                            <td>{{ $project->description }}</td>
+                            <td>{{ $project->status }}</td>
+                            <td>{{ $project->target_donations }}</td>
+                            <td>{{ $project->starting_date }}</td>
+                            <td>{{ $project->category_id }}</td>
                             <td>
-                                <a href="/restore/{{ $user->id }}" class="btn  btn-primary d-inline">Restore</a>
-                                {{-- <form action="/force-delete/{{ $user->id }}" method="post" class="d-inline">
-                                    @csrf
-                                    @method("DELETE")
-                                    <button class="btn btn-danger">Delete</button>
-                                </form> --}}
+                                <a href="/restore/project/{{ $project->id }}" class="btn  btn-primary d-inline">restore</a>
                                 </td>
                         </tr>
                         @endforeach

@@ -6,7 +6,35 @@
 <div class="col-xl-12">
     <div class="card">
         <div class="card-header">
-            <h5>All users</h5>
+            <div class="row">
+                <div class="col-md-2">
+                    <h5>All donations</h5>
+                </div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-4">
+
+                            <select name="role" class="form-control" onchange="location = this.value;">
+                                <option>Role</option>
+                                <option value="/filter/users/all">All</option>
+                                <option value="/filter/users/user">
+                                    User
+                                </option>  
+                                <option value="/filter/users/admin">
+                                  Admin
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <form action="/admin/users" class="d-inline">
+                            <input type="text" class="form-control w-75 d-inline-block"
+                             name="search" placeholder="Search">
+                            <button type="submit" class="btn btn-primary" style="margin-bottom: 4px">Search</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
         </div>
         <div class="card-body table-border-style">
@@ -23,10 +51,13 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                            $i = 0;
+                        @endphp
                         @foreach ($users as $user)
                         <tr>
-                            <td>1</td>
-                            <td><img src="/img/{{ $user->image }}" style="width:80px" alt=""></td>
+                            <td>{{ ++$i }}</td>
+                            <td><img src="{{ asset('img/' . $user->image) }} " style="width:80px" alt=""></td>
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->role }}</td>

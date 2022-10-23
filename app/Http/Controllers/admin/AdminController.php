@@ -18,7 +18,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->get();
+        $users = User::latest()->filter(request(["search"]))->get();
         return view("dashboard.index", ["users" => $users]);
     }
 
@@ -116,9 +116,10 @@ class AdminController extends Controller
         return redirect("/trash");
     }
 
-    // public function forceDelete(User $user)
-    // {
-    //     $user->forceDelete();
-    //     return back();
-    // }
+    public function filterByRole($role = "")
+    {
+        $users = User::latest()->filter(["role" => $role])->get();
+        // dd($users);
+        return view("dashboard.index", ["users" => $users]);
+    }
 }

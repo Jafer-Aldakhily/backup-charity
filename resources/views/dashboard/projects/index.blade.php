@@ -6,7 +6,7 @@
 <div class="col-xl-12">
     <div class="card">
         <div class="card-header">
-            <h5>All users</h5>
+            <h5>All projects</h5>
             
         </div>
         <div class="card-body table-border-style">
@@ -15,22 +15,38 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Username</th>
+                            <th>image</th>
+                            <th>Name of project</th>
+                            <th>Description</th>
+                            <th>status</th>
+                            <th>target_donations</th>
+                            <th>starting_date</th>
+                            <th>category_id</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($users as $user)
+                        @php
+                            $i=0;
+                        @endphp
+                        @foreach ($projects as $project)
                         <tr>
-                            <td>1</td>
-                            <td>{{ $user->name }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td>{{ $user->role }}</td>
+                            <td>{{++$i}}</td>
+                            <td><img src="data:image/jpg;base64,{{ chunk_split(base64_encode($project->image)) }}"                                " alt=""></td>
                             <td>
-                                <a href="/admin/users/{{ $user->id }}/edit" class="btn  btn-primary d-inline">Edit</a>
-                                <form action="/admin/users/{{ $user->id }}" method="post" class="d-inline">
+                                <a href="/project/volunteers/{{ $project->id }}">
+                                    {{ $project->name }}
+                                </a>
+                            </td>
+                            <td>{{ $project->description }}</td>
+                            <td>{{ $project->status }}</td>
+                            <td>{{ $project->target_donations }}</td>
+                            <td>{{ $project->starting_date }}</td>
+                            <td>{{ $project->category_id }}</td>
+                            <td>
+                                <a href="/admin/projects/{{ $project->id }}/edit" class="btn  btn-primary d-inline">Edit</a>
+                                
+                                <form action="/admin/projects/{{ $project->id }}" method="post" class="d-inline">
                                     @csrf
                                     @method("DELETE")
                                     <button class="btn btn-danger">Delete</button>

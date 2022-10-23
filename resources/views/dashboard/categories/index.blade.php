@@ -1,11 +1,12 @@
 @extends('layouts.master-admin')
 
+
 @section('content')
     
 <div class="col-xl-12">
     <div class="card">
         <div class="card-header">
-            <h5>Archive users</h5>
+            <h5>All categories</h5>
             
         </div>
         <div class="card-body table-border-style">
@@ -27,12 +28,12 @@
                             <td>{{ ++$i }}</td>
                             <td>{{ $category->name }}</td>
                             <td>
-                                <a href="/restore/category/{{ $category->id }}" class="btn  btn-primary d-inline">Restore</a>
-                                {{-- <form action="/force-delete/{{ $category->id }}" method="post" class="d-inline">
+                                <a href="/admin/categories/{{ $category->id }}/edit" class="btn  btn-primary d-inline">Edit</a>
+                                <form action="/admin/categories/{{ $category->id }}" method="post" class="d-inline">
                                     @csrf
                                     @method("DELETE")
                                     <button class="btn btn-danger">Delete</button>
-                                </form> --}}
+                                </form>
                                 </td>
                         </tr>
                         @endforeach

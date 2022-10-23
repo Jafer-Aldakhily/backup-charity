@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Project;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class ProjectController extends Controller
 {
@@ -14,7 +16,8 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        //
+        $projects = Project::latest()->get();
+        return view("dashboard.projects.index", ["projects" => $projects]);
     }
 
     /**
@@ -24,7 +27,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        return view("dashboard.projects.create", compact("categories"));
     }
 
     /**
@@ -35,7 +39,30 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->image);
+        $request->validate([
+            "name" => "required",
+            "description" => "required",
+            // "image" => "required|image|mimes:png,jpg|max:2048",
+            "target_donations" => "required",
+            "starting_date" => "required",
+            "status" => "required",
+            "category_id" => "required",
+        ]);
+
+        // $imageName = time() . "." . $request->image->extension();
+        // $request->image->move(public_path('images'), $imageName);
+        // $image = base64_encode(file_get_contents($request->file('image')));
+        $project = new Project();
+        $project->name = $request->name;
+        $project->description = $request->description;
+        $project->image = "jafer.png";
+        $project->target_donations = $request->target_donations;
+        $project->starting_date = $request->starting_date;
+        $project->status = $request->status;
+        $project->category_id = $request->category_id;
+        $project->save();
+        return redirect('/admin/projects');
     }
 
     /**
@@ -57,7 +84,8 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        //
+        $project = Project::find($id);
+        return view("dashboard.projects.edit", ["project" => $project]);
     }
 
     /**
@@ -69,7 +97,26 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $request->validate([
+            "name" => "required",
+            "description" => "required",
+            "image" => "required|image|mimes:png,jpg|max:2048",
+            "target_donations" => "required",
+            "starting_date" => "required",
+            "status" => "required"
+        ]);
+
+        $image = base64_encode(file_get_contents($request->file('image')));
+        $project = Project::find($id);
+        $project->name = $request->name;
+        $project->description = $request->description;
+        $project->image = $image;
+        $project->target_donations = $request->target_donations;
+        $project->starting_date = $request->starting_date;
+        $project->status = $request->status;
+        $project->save();
+        return redirect('/admin/projects');
     }
 
     /**
@@ -80,6 +127,30 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $project = Project::find($id);
+        $project->delete();
+        return redirect('/admin/projects');
+    }
+
+    public function trashed()
+    {
+        $projects = Project::onlyTrashed()->get();
+        return view('dashboard.projects.trash', ["projects" => $projects]);
+    }
+
+    public function restore($id)
+    {
+        $project = Project::withTrashed()->find($id);
+        $project->restore();
+        return redirect('/admin/projects');
+    }
+
+
+
+    public function project_volunteers($id)
+    {
+        $project = Project::find($id);
+        // dd($project->volunteers);
+        return view('dashboard.projects.volunteers', ["project" => $project]);
     }
 }
